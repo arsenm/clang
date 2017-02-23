@@ -1759,12 +1759,12 @@ public:
 };
 
 static const unsigned NVPTXAddrSpaceMap[] = {
-    0, // opencl_private
+    0, // opencl_generic
     1, // opencl_global
     3, // opencl_local
+    0, // opencl_private
     4, // opencl_constant
     // FIXME: generic has to be added to the target
-    0, // opencl_generic
     1, // cuda_device
     4, // cuda_constant
     3, // cuda_shared
@@ -2015,11 +2015,11 @@ ArrayRef<const char *> NVPTXTargetInfo::getGCCRegNames() const {
 
 // FIXME: Need to be able to map private to 5
 static const unsigned AMDGPUAddrSpaceMap[] = {
-  0,    // opencl_private
+  0,    // opencl_generic
   1,    // opencl_global
   3,    // opencl_local
+  5,    // opencl_private
   2,    // opencl_constant
-  0,    // opencl_generic
   1,    // cuda_device
   2,    // cuda_constant
   3     // cuda_shared
@@ -7354,12 +7354,13 @@ ArrayRef<const char *> MSP430TargetInfo::getGCCRegNames() const {
 // publicly available in http://tce.cs.tut.fi
 
 static const unsigned TCEOpenCLAddrSpaceMap[] = {
-    0, // opencl_private
+    0, // opencl_generic
     3, // opencl_global
     4, // opencl_local
+    0, // opencl_private
     5, // opencl_constant
     // FIXME: generic has to be added to the target
-    0, // opencl_generic
+
     0, // cuda_device
     0, // cuda_constant
     0  // cuda_shared
@@ -8321,11 +8322,11 @@ const Builtin::Info Le64TargetInfo::BuiltinInfo[] = {
 };
 
 static const unsigned SPIRAddrSpaceMap[] = {
-    0, // opencl_private
+    4, // opencl_generic
     1, // opencl_global
     3, // opencl_local
+    0, // opencl_private
     2, // opencl_constant
-    4, // opencl_generic
     0, // cuda_device
     0, // cuda_constant
     0  // cuda_shared

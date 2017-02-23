@@ -27,11 +27,11 @@ namespace LangAS {
 enum ID {
   Offset = 0x7FFF00,
 
-  opencl_private = Offset,
+  opencl_generic = Offset,
   opencl_global,
   opencl_local,
+  opencl_private,
   opencl_constant,
-  opencl_generic,
 
   cuda_device,
   cuda_constant,
