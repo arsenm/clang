@@ -1759,6 +1759,7 @@ public:
 };
 
 static const unsigned NVPTXAddrSpaceMap[] = {
+    0, // opencl_private
     1, // opencl_global
     3, // opencl_local
     4, // opencl_constant
@@ -2014,6 +2015,7 @@ ArrayRef<const char *> NVPTXTargetInfo::getGCCRegNames() const {
 
 // FIXME: Need to be able to map private to 5
 static const unsigned AMDGPUAddrSpaceMap[] = {
+  0,    // opencl_private
   1,    // opencl_global
   3,    // opencl_local
   2,    // opencl_constant
@@ -7352,6 +7354,7 @@ ArrayRef<const char *> MSP430TargetInfo::getGCCRegNames() const {
 // publicly available in http://tce.cs.tut.fi
 
 static const unsigned TCEOpenCLAddrSpaceMap[] = {
+    0, // opencl_private
     3, // opencl_global
     4, // opencl_local
     5, // opencl_constant
@@ -8318,6 +8321,7 @@ const Builtin::Info Le64TargetInfo::BuiltinInfo[] = {
 };
 
 static const unsigned SPIRAddrSpaceMap[] = {
+    0, // opencl_private
     1, // opencl_global
     3, // opencl_local
     2, // opencl_constant

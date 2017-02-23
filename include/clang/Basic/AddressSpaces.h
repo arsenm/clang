@@ -27,7 +27,8 @@ namespace LangAS {
 enum ID {
   Offset = 0x7FFF00,
 
-  opencl_global = Offset,
+  opencl_private = Offset,
+  opencl_global,
   opencl_local,
   opencl_constant,
   opencl_generic,

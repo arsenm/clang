@@ -1652,6 +1652,9 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
       case LangAS::opencl_local:
         OS << "__local";
         break;
+      case LangAS::opencl_private:
+        OS << "__private";
+        break;
       case LangAS::opencl_constant:
         OS << "__constant";
         break;

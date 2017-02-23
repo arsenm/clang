@@ -5540,16 +5540,17 @@ static void HandleAddressSpaceTypeAttribute(QualType &Type,
   } else {
     // The keyword-based type attributes imply which address space to use.
     switch (Attr.getKind()) {
+    case AttributeList::AT_OpenCLGenericAddressSpace:
+      ASIdx = LangAS::opencl_generic; break;
     case AttributeList::AT_OpenCLGlobalAddressSpace:
       ASIdx = LangAS::opencl_global; break;
     case AttributeList::AT_OpenCLLocalAddressSpace:
       ASIdx = LangAS::opencl_local; break;
+    case AttributeList::AT_OpenCLPrivateAddressSpace:
+      ASIdx = LangAS::opencl_private; break;
     case AttributeList::AT_OpenCLConstantAddressSpace:
       ASIdx = LangAS::opencl_constant; break;
-    case AttributeList::AT_OpenCLGenericAddressSpace:
-      ASIdx = LangAS::opencl_generic; break;
     default:
-      assert(Attr.getKind() == AttributeList::AT_OpenCLPrivateAddressSpace);
       ASIdx = 0; break;
     }
   }
