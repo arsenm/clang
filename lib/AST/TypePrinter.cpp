@@ -1641,11 +1641,12 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
     OS << "__unaligned";
     addSpace = true;
   }
-  if (unsigned addrspace = getAddressSpace()) {
+  unsigned AddrSpace = getAddressSpace();
+  if (hasAddressSpace()) {
     if (addSpace)
       OS << ' ';
     addSpace = true;
-    switch (addrspace) {
+    switch (AddrSpace) {
       case LangAS::opencl_global:
         OS << "__global";
         break;
@@ -1663,10 +1664,13 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
         break;
       default:
         OS << "__attribute__((address_space(";
-        OS << addrspace;
+        OS << AddrSpace;
         OS << ")))";
     }
+  } else if (Policy.PrintGenericAddrSpace) {
+    OS << "__generic";
   }
+
   if (Qualifiers::GC gc = getObjCGCAttr()) {
     if (addSpace)
       OS << ' ';

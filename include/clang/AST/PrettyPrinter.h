@@ -50,7 +50,8 @@ struct PrintingPolicy {
       UseVoidForZeroParams(!LO.CPlusPlus),
       TerseOutput(false), PolishForDeclaration(false),
       Half(LO.Half), MSWChar(LO.MicrosoftExt && !LO.WChar),
-      IncludeNewlines(true), MSVCFormatting(false) { }
+      IncludeNewlines(true), MSVCFormatting(false),
+      PrintGenericAddrSpace(LO.OpenCL) { }
 
   /// \brief Adjust this printing policy for cases where it's known that
   /// we're printing C++ code (for instance, if AST dumping reaches a
@@ -200,6 +201,9 @@ struct PrintingPolicy {
   /// prints anonymous namespaces as `anonymous namespace' and does not insert
   /// spaces after template arguments.
   bool MSVCFormatting : 1;
+
+  /// \brief Print generic pointers with __generic prefix in OpenCL.
+  bool PrintGenericAddrSpace : 1;
 };
 
 } // end namespace clang
