@@ -6936,6 +6936,22 @@ static void processTypeAttrs(TypeProcessingState &state, QualType &type,
     }
   }
 
+
+  if (state.getSema().getLangOpts().OpenCL &&
+      state.getSema().getLangOpts().OpenCLVersion < 200 &&
+      !hasOpenCLAddressSpace && type.getAddressSpace() == 0 &&
+      (TAL == TAL_DeclSpec || TAL == TAL_DeclChunk) &&
+      !type->isSamplerT()) {
+    Declarator &D = state.getDeclarator();
+    if (state.getCurrentChunkIndex() > 0 &&
+        (D.getTypeObject(state.getCurrentChunkIndex() - 1).Kind == DeclaratorChunk::Pointer)) {
+      type = state.getSema().Context.getAddrSpaceQualType(
+        type, LangAS::opencl_private);
+    }
+
+    return;
+  }
+
   // If address space is not set, OpenCL 2.0 defines non private default
   // address spaces for some cases:
   // OpenCL 2.0, section 6.5:

@@ -7715,7 +7715,6 @@ static OpenCLParamType getOpenCLKernelParameterType(Sema &S, QualType PT) {
     switch (PointeeType.getAddressSpace()) {
     case LangAS::opencl_generic:
     case LangAS::opencl_private:
-    case 0: // TODO: Consoldiate with generic
       return InvalidAddrSpacePtrKernelParam;
     default:
       break;

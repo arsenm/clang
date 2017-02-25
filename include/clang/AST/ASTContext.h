@@ -2311,10 +2311,14 @@ public:
   }
 
   unsigned getTargetAddressSpace(unsigned AS) const {
+    // Special case 0.
+    if (AS == LangAS::opencl_generic && LangOpts.OpenCL)
+      return (*AddrSpaceMap)[LangAS::Count];
+
     if (AS < LangAS::Offset || AS >= LangAS::Offset + LangAS::Count)
       return AS;
-    else
-      return (*AddrSpaceMap)[AS - LangAS::Offset];
+
+    return (*AddrSpaceMap)[AS - LangAS::Offset];
   }
 
   /// Get target-dependent integer value for null pointer which is used for

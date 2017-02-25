@@ -1553,7 +1553,9 @@ CodeGenTypes::GetFunctionType(const CGFunctionInfo &FI) {
   if (IRFunctionArgs.hasSRetArg()) {
     QualType Ret = FI.getReturnType();
     llvm::Type *Ty = ConvertType(Ret);
-    unsigned AddressSpace = Context.getTargetAddressSpace(Ret);
+
+    // The sret pointer type must be the alloca pointer address space.
+    unsigned AddressSpace = 0;
     ArgTypes[IRFunctionArgs.getSRetArgNo()] =
         llvm::PointerType::get(Ty, AddressSpace);
   }
