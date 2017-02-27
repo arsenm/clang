@@ -2311,9 +2311,9 @@ public:
   }
 
   unsigned getTargetAddressSpace(unsigned AS) const {
-    // Special case 0.
-    if (AS == LangAS::opencl_generic && LangOpts.OpenCL)
-      return (*AddrSpaceMap)[LangAS::Count];
+    // Special case 0 to make it equivalent to opencl_generic.
+    if (AS == 0 && LangOpts.OpenCL)
+      return (*AddrSpaceMap)[LangAS::opencl_generic - LangAS::Offset];
 
     if (AS < LangAS::Offset || AS >= LangAS::Offset + LangAS::Count)
       return AS;

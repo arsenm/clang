@@ -37,14 +37,14 @@ kernel void image_in_struct_arg(FooImage2D arg) { } // expected-error{{struct ke
 
 typedef struct Foo // expected-note{{within field of type 'Foo' declared here}}
 {
-  int* ptrField; // expected-note{{field of illegal pointer type 'int *' declared here}}
+  int* ptrField; // expected-note{{field of illegal pointer type '__private int *' declared here}}
 } Foo;
 
 kernel void pointer_in_struct_arg(Foo arg) { } // expected-error{{struct kernel parameters may not contain pointers}}
 
 typedef union FooUnion // expected-note{{within field of type 'FooUnion' declared here}}
 {
-  int* ptrField; // expected-note{{field of illegal pointer type 'int *' declared here}}
+  int* ptrField; // expected-note{{field of illegal pointer type '__private int *' declared here}}
 } FooUnion;
 
 kernel void pointer_in_union_arg(FooUnion arg) { }// expected-error{{union kernel parameters may not contain pointers}}
@@ -54,7 +54,7 @@ typedef struct NestedPointer // expected-note 2 {{within field of type 'NestedPo
   int x;
   struct InnerNestedPointer
   {
-    int* ptrField; // expected-note 3 {{field of illegal pointer type 'int *' declared here}}
+    int* ptrField; // expected-note 3 {{field of illegal pointer type '__private int *' declared here}}
   } inner; // expected-note 3 {{within field of type 'struct InnerNestedPointer' declared here}}
 } NestedPointer;
 
@@ -68,7 +68,7 @@ struct NestedPointerComplex // expected-note{{within field of type 'NestedPointe
   struct InnerNestedPointerComplex
   {
     int innerFoo;
-    int* innerPtrField; // expected-note{{field of illegal pointer type 'int *' declared here}}
+    int* innerPtrField; // expected-note{{field of illegal pointer type '__private int *' declared here}}
   } inner; // expected-note{{within field of type 'struct InnerNestedPointerComplex' declared here}}
 
   float y;

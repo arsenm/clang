@@ -25,12 +25,11 @@ namespace LangAS {
 /// This uses a high starting offset so as not to conflict with any address
 /// space used by a target.
 enum ID {
-  // opencl_generic is treated as 0.
-  opencl_generic = 0,
-
   Offset = 0x7FFF00,
 
-  opencl_global = Offset,
+  // Treat opencl_generic interchangable with 0.
+  opencl_generic = Offset,
+  opencl_global,
   opencl_local,
   opencl_private,
   opencl_constant,
@@ -46,7 +45,7 @@ enum ID {
 /// The type of a lookup table which maps from language-specific address spaces
 /// to target-specific ones.
 /// Last entry maps opencl_generic, treated as 0.
-typedef unsigned Map[Count+1];
+typedef unsigned Map[Count];
 
 }
 

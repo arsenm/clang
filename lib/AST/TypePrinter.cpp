@@ -1647,6 +1647,9 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
       OS << ' ';
     addSpace = true;
     switch (AddrSpace) {
+      case LangAS::opencl_generic:
+        OS << "__generic";
+        break;
       case LangAS::opencl_global:
         OS << "__global";
         break;
@@ -1667,8 +1670,6 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
         OS << AddrSpace;
         OS << ")))";
     }
-  } else if (Policy.PrintGenericAddrSpace) {
-    OS << "__generic";
   }
 
   if (Qualifiers::GC gc = getObjCGCAttr()) {

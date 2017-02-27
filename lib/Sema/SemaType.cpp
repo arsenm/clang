@@ -6944,7 +6944,7 @@ static void processTypeAttrs(TypeProcessingState &state, QualType &type,
       !type->isSamplerT()) {
     Declarator &D = state.getDeclarator();
     if (state.getCurrentChunkIndex() > 0 &&
-        (D.getTypeObject(state.getCurrentChunkIndex() - 1).Kind == DeclaratorChunk::Pointer)) {
+        D.getTypeObject(state.getCurrentChunkIndex() - 1).Kind == DeclaratorChunk::Pointer) {
       type = state.getSema().Context.getAddrSpaceQualType(
         type, LangAS::opencl_private);
     }
