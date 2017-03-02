@@ -1266,7 +1266,8 @@ static void CreateCoercedStore(llvm::Value *Src,
     return;
   }
 
-  uint64_t SrcSize = CGF.CGM.getDataLayout().getTypeAllocSize(SrcTy);
+  const llvm::DataLayout &DL = CGF.CGM.getDataLayout();
+  uint64_t SrcSize = DL.getTypeAllocSize(SrcTy);
 
   if (llvm::StructType *DstSTy = dyn_cast<llvm::StructType>(DstTy)) {
     Dst = EnterStructPointerForCoercedAccess(Dst, DstSTy, SrcSize, CGF);
@@ -1282,11 +1283,12 @@ static void CreateCoercedStore(llvm::Value *Src,
     return;
   }
 
-  uint64_t DstSize = CGF.CGM.getDataLayout().getTypeAllocSize(DstTy);
+  uint64_t DstSize = DL.getTypeAllocSize(DstTy);
 
   // If store is legal, just bitcast the src pointer.
   if (SrcSize <= DstSize) {
-    Dst = CGF.Builder.CreateBitCast(Dst, llvm::PointerType::getUnqual(SrcTy));
+    Dst = CGF.Builder.CreateBitCast(Dst, llvm::PointerType::get(SrcTy,
+                                                                DL.getStackAddrSpace()));
     BuildAggStore(CGF, Src, Dst, DstIsVolatile);
   } else {
     // Otherwise do coercion through memory. This is stupid, but
@@ -1300,8 +1302,8 @@ static void CreateCoercedStore(llvm::Value *Src,
     // to that information.
     Address Tmp = CreateTempAllocaForCoercion(CGF, SrcTy, Dst.getAlignment());
     CGF.Builder.CreateStore(Src, Tmp);
-    Address Casted = CGF.Builder.CreateBitCast(Tmp, CGF.Int8PtrTy);
-    Address DstCasted = CGF.Builder.CreateBitCast(Dst, CGF.Int8PtrTy);
+    Address Casted = CGF.Builder.CreateBitCast(Tmp, CGF.Int8AllocaPtrTy);
+    Address DstCasted = CGF.Builder.CreateBitCast(Dst, CGF.Int8AllocaPtrTy);
     CGF.Builder.CreateMemCpy(DstCasted, Casted,
         llvm::ConstantInt::get(CGF.IntPtrTy, DstSize),
         false);
@@ -3945,8 +3947,9 @@ RValue CodeGenFunction::EmitCall(const CGFunctionInfo &CallInfo,
             dyn_cast<llvm::StructType>(ArgInfo.getCoerceToType());
       if (STy && ArgInfo.isDirect() && ArgInfo.getCanBeFlattened()) {
         llvm::Type *SrcTy = Src.getType()->getElementType();
-        uint64_t SrcSize = CGM.getDataLayout().getTypeAllocSize(SrcTy);
-        uint64_t DstSize = CGM.getDataLayout().getTypeAllocSize(STy);
+        const llvm::DataLayout &DL = CGM.getDataLayout();
+        uint64_t SrcSize = DL.getTypeAllocSize(SrcTy);
+        uint64_t DstSize = DL.getTypeAllocSize(STy);
 
         // If the source type is smaller than the destination type of the
         // coerce-to logic, copy the source value into a temp alloca the size
