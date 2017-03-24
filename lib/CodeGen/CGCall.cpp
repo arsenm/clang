@@ -1288,7 +1288,7 @@ static void CreateCoercedStore(llvm::Value *Src,
   // If store is legal, just bitcast the src pointer.
   if (SrcSize <= DstSize) {
     Dst = CGF.Builder.CreateBitCast(Dst, llvm::PointerType::get(SrcTy,
-                                                                DL.getStackAddrSpace()));
+                                                                DL.getAllocaAddrSpace()));
     BuildAggStore(CGF, Src, Dst, DstIsVolatile);
   } else {
     // Otherwise do coercion through memory. This is stupid, but
