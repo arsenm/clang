@@ -285,7 +285,7 @@ static Address emitVoidPtrDirectVAArg(CodeGenFunction &CGF,
     Addr = Address(emitRoundPointerUpToAlignment(CGF, Ptr, DirectAlign),
                                                  DirectAlign);
   } else {
-    Addr = Address(Ptr, SlotSize); 
+    Addr = Address(Ptr, SlotSize);
   }
 
   // Advance the pointer past the argument, then store that back.
@@ -349,7 +349,7 @@ static Address emitVoidPtrVAArg(CodeGenFunction &CGF, Address VAListAddr,
   }
 
   return Addr;
-  
+
 }
 
 static Address emitMergePHI(CodeGenFunction &CGF,
@@ -983,7 +983,7 @@ class X86_32ABIInfo : public SwiftABIInfo {
   ABIArgInfo classifyReturnType(QualType RetTy, CCState &State) const;
   ABIArgInfo classifyArgumentType(QualType RetTy, CCState &State) const;
 
-  /// \brief Updates the number of available free registers, returns 
+  /// \brief Updates the number of available free registers, returns
   /// true if any registers were allocated.
   bool updateFreeRegs(QualType Ty, CCState &State) const;
 
@@ -1013,7 +1013,7 @@ public:
                 bool RetSmallStructInRegABI, bool Win32StructABI,
                 unsigned NumRegisterParameters, bool SoftFloatABI)
     : SwiftABIInfo(CGT), IsDarwinVectorABI(DarwinVectorABI),
-      IsRetSmallStructInRegABI(RetSmallStructInRegABI), 
+      IsRetSmallStructInRegABI(RetSmallStructInRegABI),
       IsWin32StructABI(Win32StructABI),
       IsSoftFloatABI(SoftFloatABI),
       IsMCUABI(CGT.getTarget().getTriple().isOSIAMCU()),
@@ -1027,7 +1027,7 @@ public:
     // four vector registers for vectors, but those can overlap with the
     // scalar registers.
     return occupiesMoreThan(CGT, scalars, /*total*/ 3);
-  }  
+  }
 
   bool isSwiftErrorInRegister() const override {
     // x86-32 lowering does not support passing swifterror in a register.
@@ -1517,7 +1517,7 @@ bool X86_32ABIInfo::updateFreeRegs(QualType Ty, CCState &State) const {
   return true;
 }
 
-bool X86_32ABIInfo::shouldAggregateUseDirect(QualType Ty, CCState &State, 
+bool X86_32ABIInfo::shouldAggregateUseDirect(QualType Ty, CCState &State,
                                              bool &InReg,
                                              bool &NeedsPadding) const {
   // On Windows, aggregates other than HFAs are never passed in registers, and
@@ -1560,7 +1560,7 @@ bool X86_32ABIInfo::shouldPrimitiveUseInReg(QualType Ty, CCState &State) const {
     if (getContext().getTypeSize(Ty) > 32)
       return false;
 
-    return (Ty->isIntegralOrEnumerationType() || Ty->isPointerType() || 
+    return (Ty->isIntegralOrEnumerationType() || Ty->isPointerType() ||
         Ty->isReferenceType());
   }
 
@@ -2158,7 +2158,7 @@ public:
                                     ArrayRef<llvm::Type*> scalars,
                                     bool asReturnValue) const override {
     return occupiesMoreThan(CGT, scalars, /*total*/ 4);
-  }  
+  }
   bool isSwiftErrorInRegister() const override {
     return true;
   }
@@ -3754,7 +3754,7 @@ Address X86_64ABIInfo::EmitVAArg(CodeGenFunction &CGF, Address VAListAddr,
       CGF.Builder.CreateMemCpy(Tmp, RegAddr, TySize, false);
       RegAddr = Tmp;
     }
-    
+
   } else if (neededSSE == 1) {
     RegAddr = Address(CGF.Builder.CreateGEP(RegSaveArea, fp_offset),
                       CharUnits::fromQuantity(16));
@@ -4112,7 +4112,7 @@ Address PPC32_SVR4_ABIInfo::EmitVAArg(CodeGenFunction &CGF, Address VAList,
     }
 
     // Get the address of the saved value by scaling the number of
-    // registers we've used by the number of 
+    // registers we've used by the number of
     CharUnits RegSize = CharUnits::fromQuantity((isInt || IsSoftFloatABI) ? 4 : 8);
     llvm::Value *RegOffset =
       Builder.CreateMul(NumRegs, Builder.getInt8(RegSize.getQuantity()));
@@ -4123,7 +4123,7 @@ Address PPC32_SVR4_ABIInfo::EmitVAArg(CodeGenFunction &CGF, Address VAList,
 
     // Increase the used-register count.
     NumRegs =
-      Builder.CreateAdd(NumRegs, 
+      Builder.CreateAdd(NumRegs,
                         Builder.getInt8((isI64 || (isF64 && IsSoftFloatABI)) ? 2 : 1));
     Builder.CreateStore(NumRegs, NumRegsAddr);
 
@@ -4159,7 +4159,7 @@ Address PPC32_SVR4_ABIInfo::EmitVAArg(CodeGenFunction &CGF, Address VAList,
       OverflowArea = Address(emitRoundPointerUpToAlignment(CGF, Ptr, Align),
                                                            Align);
     }
- 
+
     MemAddr = Builder.CreateElementBitCast(OverflowArea, DirectTy);
 
     // Increase the overflow area.
